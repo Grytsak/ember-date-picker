@@ -1,0 +1,1 @@
+export { default } from 'ember-date-picker/components/date-picker';

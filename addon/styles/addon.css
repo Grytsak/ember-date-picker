@@ -1,0 +1,101 @@
+/* COMMON */
+
+.hidden {
+  display: none;
+}
+
+/* COMMON end*/
+
+
+.date-picker-container {
+  margin: 30px;
+}
+
+.date-picker {
+  max-width: 242px;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.date-picker__month-container,
+.date-picker__week-container,
+.date-picker__days-container {
+  display: flex;
+}
+
+.date-picker__prev,
+.date-picker__next {
+  width: 23px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.date-picker__prev i {
+  padding-right: 2px;
+}
+
+.date-picker__next i {
+  padding-left: 2px;
+}
+
+.date-picker__prev:hover,
+.date-picker__next:hover {
+  background-color: #ccc;
+}
+
+.date-picker__switch {
+  cursor: pointer;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.date-picker__week-container {
+  margin: 4px 0;
+}
+
+.date-picker__dow {
+  width: 14.2%;
+  height: auto;
+  border-radius: 4px;
+  border: none;
+  text-align: center;
+}
+
+.date-picker__days-container {
+  flex-wrap: wrap;
+}
+
+.date-picker__day {
+  width: 14.2%;
+  height: auto;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  padding: 4px 5px;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.date-picker__day:hover {
+  background-color: #ccc;
+}
+
+.date-picker__old,
+.date-picker__new {
+  color: #ccc;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.date-picker__today {
+  border: 1px solid #ccc;
+}
+
+.date-picker__old:hover,
+.date-picker__new:hover {
+  color: #000;
+}
