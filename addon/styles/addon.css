@@ -8,6 +8,8 @@
 
 
 .date-picker-container {
+  max-width: 242px;
+  width: 100%;
   margin: 30px;
 }
 
@@ -17,6 +19,7 @@
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin: 5px 0;
   padding: 4px;
 }
 
@@ -24,6 +27,7 @@
 .date-picker__week-container,
 .date-picker__days-container {
   display: flex;
+  align-items: center;
 }
 
 .date-picker__prev,
@@ -49,9 +53,49 @@
 }
 
 .date-picker__switch {
+  display: flex;
+  position: relative;
+  align-items: center;
   cursor: pointer;
   margin: 0 auto;
   text-align: center;
+}
+
+.date-picker__year::-webkit-inner-spin-button,
+.date-picker__year::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.date-picker__year {
+  max-width: 40px;
+  width: 100%;
+  border: none;
+  margin-left: 7px;
+  outline: none;
+
+  -moz-appearance: textfield;
+}
+
+.date-picker__year-switch {
+  position: relative;
+  display: flex;
+}
+
+.date-picker__year-switch:hover .date-picker__year-switch-btn {
+  opacity: 1;
+}
+
+.date-picker__year-switch-btn {
+  position: absolute;
+  right: -12px;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.date-picker--year-down {
+  top: 10px;
 }
 
 .date-picker__week-container {
