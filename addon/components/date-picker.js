@@ -10,7 +10,8 @@ export default Component.extend({
   init() {
     this._super(...arguments);
 
-    this.set('selectedDate', this.get('moment').moment());
+    this.set('stateDate', this.get('moment').moment());
+    this.set('dateNotPicked', true);
     this.renderCalendar();
   },
 
@@ -20,7 +21,7 @@ export default Component.extend({
     this.set('dayObjects', Ember.A());
     let
       // Clone moment object all next such variables with numbers are another clones of moment object
-      moment = this.get('selectedDate'),
+      moment = this.get('stateDate'),
       today = this.get('moment').moment(),
       // Get first day of first week
       firstDay = moment.clone().startOf('month').startOf('week'),
@@ -55,21 +56,21 @@ export default Component.extend({
       firstDay.add(1, 'days');
     }
     // Change month and year when click prev/next
-    this.set('currentMonth', this.get('selectedDate').format('MMMM'));
-    this.set('currentYear', this.get('selectedDate').format('YYYY'));
+    this.set('currentMonth', this.get('stateDate').format('MMMM'));
+    this.set('currentYear', this.get('stateDate').format('YYYY'));
 
+    console.log('stateDate', this.get('stateDate'));
     console.log('selectedDate', this.get('selectedDate'));
-    console.log('pickedDate', this.get('pickedDate'));
   },
   // Array of objects for each day
-  dayObjects: computed('selectedDate', function () {
+  dayObjects: computed('stateDate', function () {
     return [];
   }),
-  currentMonth: computed('selectedDate', function () {
-    return this.get('selectedDate').format('MMMM');
+  currentMonth: computed('stateDate', function () {
+    return this.get('stateDate').format('MMMM');
   }),
-  currentYear: computed('selectedDate', function () {
-    return this.get('selectedDate').format('YYYY');
+  currentYear: computed('stateDate', function () {
+    return this.get('stateDate').format('YYYY');
   }),
   hours: computed('selectedDate', {
     get() {
@@ -82,6 +83,21 @@ export default Component.extend({
 
     set(propName, value) {
       this.set('selectedDate', this.get('selectedDate').clone().hours(value));
+      // return this.get('selectedDate').format('HH');
+    }
+  }),
+  minutes: computed('selectedDate', {
+    get() {
+      const selectedDate = this.get('selectedDate');
+
+      if (!selectedDate) return;
+
+      return selectedDate.minutes();
+    },
+
+    set(propName, value) {
+      this.set('selectedDate', this.get('selectedDate').clone().minutes(value));
+      // return this.get('selectedDate').format('HH');
     }
   }),
   actions: {
@@ -96,16 +112,16 @@ export default Component.extend({
       });
 
       day.set('active', true);
-      // this.set('pickedDate', day.momentDateObj);
+      this.set('dateNotPicked', false);
       this.set('selectedDate', day.momentDateObj);
     },
 
     changeMonth(direction) {
       if (direction === 1) {
-        this.get('selectedDate').add(1, 'months');
+        this.get('stateDate').add(1, 'months');
       }
       if (direction === -1) {
-        this.get('selectedDate').subtract(1, 'months');
+        this.get('stateDate').subtract(1, 'months');
       }
       this.renderCalendar();
     },
@@ -113,29 +129,27 @@ export default Component.extend({
     // Change year on buttons click
     changeYear(direction) {
       if (direction === 1) {
-        this.get('selectedDate').add(1, 'years');
+        this.get('stateDate').add(1, 'years');
       }
       if (direction === -1) {
-        this.get('selectedDate').subtract(1, 'years');
+        this.get('stateDate').subtract(1, 'years');
       }
       this.renderCalendar();
     },
 
     // Change year on manual enter in input
-    toggleYear() {
-      const datePicker = document.getElementById('date-picker-year-input');
-      let selectedDate = this.get('selectedDate');
-
-      if (datePicker.value.length > 4) {
-        datePicker.value = datePicker.value.slice(0, 4);
+    enterYear(value) {
+      if (value.length > 4) {
+        value = value.slice(0, 4);
       }
 
-      if (datePicker.value.length === 4) {
-        this.set('selectedDate', this.get('moment').moment(`${datePicker.value}-${selectedDate.format('MM')}-${selectedDate.format('DD')}`));
+      if (value.length === 4) {
+        this.set('stateDate', this.get('stateDate').clone().years(value));
         this.renderCalendar();
       }
     },
 
+    // Change hours on buttons click
     changeHours(direction) {
       const
         selectedMoment = this.get('selectedDate'),
@@ -143,6 +157,27 @@ export default Component.extend({
         newHours = (currentHours + 24 + direction) % 24;
 
       this.set('hours', newHours);
+    },
+
+    // Change minutes on buttons click
+    changeMinutes(direction) {
+      const
+        selectedMoment = this.get('selectedDate'),
+        currentMinutes = selectedMoment.minutes(),
+        newHours = (currentMinutes + 60 + direction) % 60;
+
+      this.set('minutes', newHours);
+    },
+
+    enterHour(value) {
+      if (value.length >= 3) {
+        value = value.slice(0, 3);
+      }
+
+      if (value.length <= 2) {
+        this.set('selectedDate', this.get('selectedDate').clone().hours(value));
+        this.renderCalendar();
+      }
     }
   }
 

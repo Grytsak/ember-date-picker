@@ -1,53 +1,62 @@
 <div class="date-picker-container">
-        <p class="date-picker__output">{{moment-format selectedDate 'YYYY-MM-DD HH:mm'}}</p>
+    <p class="date-picker__output">{{moment-format selectedDate 'YYYY-MM-DD HH:mm'}}</p>
 
-     <div id="ember-date-picker" class="date-picker">
-         <div class="date-picker__month-container">
-             <div class="date-picker__prev" {{action "changeMonth" -1}}><i class="fa fa-chevron-left"></i></div>
-             <div class="date-picker__switch">{{currentMonth}}
-                 <div class="date-picker__year-switch">
-                     <input id="date-picker-year-input" class="date-picker__year" type="text" value="{{currentYear}}" {{action "toggleYear" on="keyUp"}}>
-                     <div class="date-picker__year-switch-btn date-picker--year-up" {{action "changeYear" 1}}><i class="fa fa-chevron-up"></i></div>
-                     <div class="date-picker__year-switch-btn date-picker--year-down" {{action "changeYear" -1}}><i class="fa fa-chevron-down"></i></div>
-                 </div>
-             </div>
-             <div class="date-picker__next" {{action "changeMonth" 1}}><i class="fa fa-chevron-right"></i></div>
-         </div>
-         <div class="date-picker__week-container">
-             <div class="date-picker__dow">Su</div>
-             <div class="date-picker__dow">Mo</div>
-             <div class="date-picker__dow">Tu</div>
-             <div class="date-picker__dow">We</div>
-             <div class="date-picker__dow">Th</div>
-             <div class="date-picker__dow">Fr</div>
-             <div class="date-picker__dow">Sa</div>
-         </div>
-         <div class="date-picker__days-container">
-             {{#each dayObjects as |day|}}
-                 <div class="date-picker__day {{if day.oldDay 'date-picker__old'}} {{if day.newDay 'date-picker__new'}} {{if day.today 'date-picker__today'}} {{if day.active 'active'}}"
-                     {{action "pickDate" day}}>{{day.monthDay}}</div>
-             {{/each}}
-         </div>
-         <div class="date-picker__time-container {{if dateNotPicked 'hidden'}}">
-             <div class="date-picker__time-input-container">
-                 {{input class='date-picker__time-input'
-                         value=hours
-                         type='text'
-                 }}
-                 <div class="date-picker__time-btns-container">
-                     <div class="date-picker__time-hour date-picker--hour-up" {{action "changeHours" 1}}><i class="fa fa-chevron-up"></i></div>
-                     <div class="date-picker__time-hour date-picker--hour-down" {{action "changeHours" -1}}><i class="fa fa-chevron-down"></i></div>
-                 </div>
-             </div>
-             <span class="date-picker--time-divider">:</span>
-             <div class="date-picker__time-input-container">
-                 <input type="text" id="date-picker-time-minutes" class="date-picker__time-input" value="00">
-                 <div class="date-picker__time-btns-container">
-                     <div class="date-picker__time-min date-picker--min-up"><i class="fa fa-chevron-up"></i></div>
-                     <div class="date-picker__time-min date-picker--min-down"><i class="fa fa-chevron-down"></i></div>
-                 </div>
-             </div>
-         </div>
+    <div id="ember-date-picker" class="date-picker">
+        <div class="date-picker__month-container">
+            <div class="date-picker__prev" {{action "changeMonth" -1}}><i class="fa fa-chevron-left"></i></div>
+            <div class="date-picker__switch">{{currentMonth}}
+                <div class="date-picker__year-switch">
+                    {{input class='date-picker__year'
+                            value=currentYear
+                            type='text'
+                            key-up='enterYear'
+                    }}
+                    <div class="date-picker__year-switch-btn date-picker--year-up" {{action "changeYear" 1}}><i class="fa fa-chevron-up"></i></div>
+                    <div class="date-picker__year-switch-btn date-picker--year-down" {{action "changeYear" -1}}><i class="fa fa-chevron-down"></i></div>
+                </div>
+            </div>
+            <div class="date-picker__next" {{action "changeMonth" 1}}><i class="fa fa-chevron-right"></i></div>
+        </div>
+        <div class="date-picker__week-container">
+            <div class="date-picker__dow">Su</div>
+            <div class="date-picker__dow">Mo</div>
+            <div class="date-picker__dow">Tu</div>
+            <div class="date-picker__dow">We</div>
+            <div class="date-picker__dow">Th</div>
+            <div class="date-picker__dow">Fr</div>
+            <div class="date-picker__dow">Sa</div>
+        </div>
+        <div class="date-picker__days-container">
+            {{#each dayObjects as |day|}}
+                <div class="date-picker__day {{if day.oldDay 'date-picker__old'}} {{if day.newDay 'date-picker__new'}} {{if day.today 'date-picker__today'}} {{if day.active 'active'}}"
+                    {{action "pickDate" day}}>{{day.monthDay}}</div>
+            {{/each}}
+        </div>
+        <div class="date-picker__time-container {{if dateNotPicked 'hidden'}}">
+            <div class="date-picker__time-input-container">
+                {{input class='date-picker__time-input'
+                        value=(moment-format selectedDate 'HH')
+                        type='text'
+                        key-up='enterHour'
+                }}
+                <div class="date-picker__time-btns-container">
+                    <div class="date-picker__time-hour date-picker--hour-up" {{action "changeHours" 1}}><i class="fa fa-chevron-up"></i></div>
+                    <div class="date-picker__time-hour date-picker--hour-down" {{action "changeHours" -1}}><i class="fa fa-chevron-down"></i></div>
+                </div>
+            </div>
+            <span class="date-picker--time-divider">:</span>
+            <div class="date-picker__time-input-container">
+                {{input class='date-picker__time-input'
+                        value=(moment-format selectedDate 'mm')
+                        type='text'
+                        key-up='enterMinutes'
+                }}
+                <div class="date-picker__time-btns-container">
+                    <div class="date-picker__time-min date-picker--min-up" {{action "changeMinutes" 5}}><i class="fa fa-chevron-up"></i></div>
+                    <div class="date-picker__time-min date-picker--min-down" {{action "changeMinutes" -5}}><i class="fa fa-chevron-down"></i></div>
+                </div>
+            </div>
+        </div>
 
-     </div>
+    </div>
 </div>
