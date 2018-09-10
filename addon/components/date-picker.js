@@ -2,7 +2,8 @@ import Component from '@ember/component';
 import EmberObject, { computed } from '@ember/object';
 import layout from '../templates/components/date-picker';
 import { inject as service } from '@ember/service';
-import {A} from '@ember/array';
+import { A } from '@ember/array';
+import { typeOf } from '@ember/utils';
 
 export default Component.extend({
   layout,
@@ -15,24 +16,33 @@ export default Component.extend({
     this.renderCalendar();
   },
 
+  // Check if n is number
+  isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  },
+
   // Render calendar
   renderCalendar() {
     // Clear dayObjects array
     this.set('dayObjects', A());
     let
       // Clone moment object all next such variables with numbers are another clones of moment object
-      moment = this.get('stateDate'),
+      stateDate = this.get('stateDate'),
       today = this.get('moment').moment(),
       // Get first day of first week
-      firstDay = moment.clone().startOf('month').startOf('week'),
+      firstDay = stateDate.clone().startOf('month').startOf('week'),
       // Get last day of last week
-      lastDay = moment.clone().endOf('month').endOf('week'),
+      lastDay = stateDate.clone().endOf('month').endOf('week'),
       // Get previous month (number)
-      oldMonth = +moment.clone().subtract(1, 'months').month(),
+      oldMonth = stateDate.clone().subtract(1, 'months').month(),
       // Get next month (number)
-      newMonth = +moment.clone().add(1, 'months').month();
+      newMonth = stateDate.clone().add(1, 'months').month(),
+      moment = this.get('moment').moment();
 
-    if (!moment) return;
+    if (!stateDate) return;
+
+
+    console.log('moment:', moment.localeData()._weekdays);
 
     // Fill array dayObjects with objects for each day
     while (firstDay.isBefore(lastDay)) {
@@ -158,35 +168,46 @@ export default Component.extend({
 
     // Change hours on manual enter in input
     enterHour(value) {
-      if (value.length > 2) {
-        value = value.slice(0, 2);
-        this.set('selectedDate', this.get('selectedDate').clone().hours(value));
-      }
+      const
+        selectedMoment = this.get('selectedDate'),
+        hours = value % 24;
 
-      if (value > 23)  {
+      if (this.isNumeric(value)) {
+        if (value.length > 2) {
+          value = value.slice(0, 2);
+          this.set('selectedDate', selectedMoment.clone().hours(value));
+        }
+
+        if (value > 23) {
+          value = 0;
+          this.set('selectedDate', selectedMoment.clone().hours(value));
+        }
+
+        if (value.length === 2) {
+          this.set('selectedDate', selectedMoment.clone().hours(value));
+        }
+      } else if (value !== '') {
         value = 0;
-        this.set('selectedDate', this.get('selectedDate').clone().hours(value));
+        this.set('selectedDate', selectedMoment.clone().hours(value));
+        alert('Please enter a number');
       }
 
-      if (value.length === 2) {
-        this.set('selectedDate', this.get('selectedDate').clone().hours(value));
-      }
     },
 
     // Change minutes on manual enter in input
     enterMinutes(value) {
       if (value.length > 2) {
         value = value.slice(0, 2);
-        this.set('selectedDate', this.get('selectedDate').clone().minutes(value));
+        this.set('selectedDate', selectedMoment.clone().minutes(value));
       }
 
-      if (value > 59)  {
+      if (value > 59) {
         value = 0;
-        this.set('selectedDate', this.get('selectedDate').clone().minutes(value));
+        this.set('selectedDate', selectedMoment.clone().minutes(value));
       }
 
       if (value.length === 2) {
-        this.set('selectedDate', this.get('selectedDate').clone().minutes(value));
+        this.set('selectedDate', selectedMoment.clone().minutes(value));
       }
     }
   }
