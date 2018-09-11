@@ -11,9 +11,16 @@ export default Component.extend({
   init() {
     this._super(...arguments);
 
+    let locale = window.navigator.userLanguage || window.navigator.language;
+    console.log('initLocale:', locale);
+    if (locale) this.set('locale', locale);
+
     this.set('stateDate', this.get('moment').moment());
-    this.set('dateNotPicked', true);
     this.renderCalendar();
+
+    let test = 657;
+    console.log('TEST:', test % 24);
+
   },
 
   // Check if n is number
@@ -25,9 +32,13 @@ export default Component.extend({
   renderCalendar() {
     // Clear dayObjects array
     this.set('dayObjects', A());
+
+    let stateDate = this.get('stateDate');
+    if (!stateDate) return;
+    stateDate.locale(this.get('locale'));
+
     let
       // Clone moment object all next such variables with numbers are another clones of moment object
-      stateDate = this.get('stateDate'),
       today = this.get('moment').moment(),
       // Get first day of first week
       firstDay = stateDate.clone().startOf('month').startOf('week'),
@@ -36,13 +47,13 @@ export default Component.extend({
       // Get previous month (number)
       oldMonth = stateDate.clone().subtract(1, 'months').month(),
       // Get next month (number)
-      newMonth = stateDate.clone().add(1, 'months').month(),
-      moment = this.get('moment').moment();
-
-    if (!stateDate) return;
+      newMonth = stateDate.clone().add(1, 'months').month();
 
 
-    console.log('moment:', moment.localeData()._weekdays);
+    const defaultWeekdays = Array.apply(null, Array(7)).map(function (_, i) {
+      return stateDate.clone().startOf('week').weekday(i).format('dd');
+    });
+    this.set('weekDays', defaultWeekdays);
 
     // Fill array dayObjects with objects for each day
     while (firstDay.isBefore(lastDay)) {
@@ -74,13 +85,27 @@ export default Component.extend({
   },
   // Array of objects for each day
   dayObjects: computed('stateDate', function () {
-    return [];
+    return A();
+  }),
+  weekDays: computed('stateDate', function () {
+    return A();
   }),
   currentMonth: computed('stateDate', function () {
     return this.get('stateDate').format('MMMM');
   }),
   currentYear: computed('stateDate', function () {
     return this.get('stateDate').format('YYYY');
+  }),
+  // Check if date is picked and show time if it is
+  dateNotPicked: computed('selectedDate', function () {
+    const selectedDate = this.get('selectedDate');
+
+    if (selectedDate) {
+      return false;
+    } else {
+      return true;
+    }
+
   }),
   // hours: computed('selectedDate', {
   //   get(propName) {
@@ -108,40 +133,33 @@ export default Component.extend({
       });
 
       day.set('active', true);
-      this.set('dateNotPicked', false);
       this.set('selectedDate', day.momentDateObj);
     },
 
     changeMonth(direction) {
-      if (direction === 1) {
-        this.get('stateDate').add(1, 'months');
-      }
-      if (direction === -1) {
-        this.get('stateDate').subtract(1, 'months');
-      }
+      this.get('stateDate').add(direction, 'months');
       this.renderCalendar();
     },
 
     // Change year on buttons click
     changeYear(direction) {
-      if (direction === 1) {
-        this.get('stateDate').add(1, 'years');
-      }
-      if (direction === -1) {
-        this.get('stateDate').subtract(1, 'years');
-      }
+      this.get('stateDate').add(direction, 'years');
       this.renderCalendar();
     },
 
     // Change year on manual enter in input
     enterYear(value) {
-      if (value.length > 4) {
-        value = value.slice(0, 4);
-      }
+      if (this.isNumeric(value)) {
+        if (value.length > 4) {
+          alert('Year value should not contain more than 4 numbers');
+        }
 
-      if (value.length === 4) {
-        this.set('stateDate', this.get('stateDate').clone().years(value));
-        this.renderCalendar();
+        if (value.length === 4) {
+          this.set('stateDate', this.get('stateDate').clone().years(value));
+          this.renderCalendar();
+        }
+      } else if (value !== '') {
+        alert('Please enter a number');
       }
     },
 
@@ -168,27 +186,18 @@ export default Component.extend({
 
     // Change hours on manual enter in input
     enterHour(value) {
-      const
-        selectedMoment = this.get('selectedDate'),
-        hours = value % 24;
+      const selectedMoment = this.get('selectedDate');
 
       if (this.isNumeric(value)) {
         if (value.length > 2) {
-          value = value.slice(0, 2);
-          this.set('selectedDate', selectedMoment.clone().hours(value));
-        }
-
-        if (value > 23) {
-          value = 0;
-          this.set('selectedDate', selectedMoment.clone().hours(value));
+          alert('Hour value should not contain more than 2 numbers');
         }
 
         if (value.length === 2) {
-          this.set('selectedDate', selectedMoment.clone().hours(value));
+          let validValue = value % 24;
+          this.set('selectedDate', selectedMoment.clone().hours(validValue));
         }
       } else if (value !== '') {
-        value = 0;
-        this.set('selectedDate', selectedMoment.clone().hours(value));
         alert('Please enter a number');
       }
 
@@ -196,18 +205,19 @@ export default Component.extend({
 
     // Change minutes on manual enter in input
     enterMinutes(value) {
-      if (value.length > 2) {
-        value = value.slice(0, 2);
-        this.set('selectedDate', selectedMoment.clone().minutes(value));
-      }
+      const selectedMoment = this.get('selectedDate');
 
-      if (value > 59) {
-        value = 0;
-        this.set('selectedDate', selectedMoment.clone().minutes(value));
-      }
+      if (this.isNumeric(value)) {
+        if (value.length > 2) {
+          alert('Hour value should not contain more than 2 numbers');
+        }
 
-      if (value.length === 2) {
-        this.set('selectedDate', selectedMoment.clone().minutes(value));
+        if (value.length === 2) {
+          let validValue = value % 60;
+          this.set('selectedDate', selectedMoment.clone().minutes(validValue));
+        }
+      } else if (value !== '') {
+        alert('Please enter a number');
       }
     }
   }
