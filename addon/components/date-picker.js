@@ -1,9 +1,8 @@
 import Component from '@ember/component';
-import EmberObject, { computed } from '@ember/object';
 import layout from '../templates/components/date-picker';
+import EmberObject, { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import { typeOf } from '@ember/utils';
 
 export default Component.extend({
   layout,
@@ -17,10 +16,6 @@ export default Component.extend({
 
     this.set('stateDate', this.get('moment').moment());
     this.renderCalendar();
-
-    let test = 657;
-    console.log('TEST:', test % 24);
-
   },
 
   // Check if n is number
@@ -161,65 +156,65 @@ export default Component.extend({
       } else if (value !== '') {
         alert('Please enter a number');
       }
-    },
-
-    // Change hours on buttons click
-    changeHours(direction) {
-      const
-        selectedMoment = this.get('selectedDate'),
-        currentHours = selectedMoment.hours(),
-        newHours = (currentHours + 24 + direction) % 24;
-
-      this.set('selectedDate', this.get('selectedDate').clone().hours(newHours));
-      // this.set('hours', newHours);
-    },
-
-    // Change minutes on buttons click
-    changeMinutes(direction) {
-      const
-        selectedMoment = this.get('selectedDate'),
-        currentMinutes = selectedMoment.minutes(),
-        newMinutes = (currentMinutes + 60 + direction) % 60;
-
-      this.set('selectedDate', this.get('selectedDate').clone().minutes(newMinutes));
-    },
-
-    // Change hours on manual enter in input
-    enterHour(value) {
-      const selectedMoment = this.get('selectedDate');
-
-      if (this.isNumeric(value)) {
-        if (value.length > 2) {
-          alert('Hour value should not contain more than 2 numbers');
-        }
-
-        if (value.length === 2) {
-          let validValue = value % 24;
-          this.set('selectedDate', selectedMoment.clone().hours(validValue));
-        }
-      } else if (value !== '') {
-        alert('Please enter a number');
-      }
-
-    },
-
-    // Change minutes on manual enter in input
-    enterMinutes(value) {
-      const selectedMoment = this.get('selectedDate');
-
-      if (this.isNumeric(value)) {
-        if (value.length > 2) {
-          alert('Hour value should not contain more than 2 numbers');
-        }
-
-        if (value.length === 2) {
-          let validValue = value % 60;
-          this.set('selectedDate', selectedMoment.clone().minutes(validValue));
-        }
-      } else if (value !== '') {
-        alert('Please enter a number');
-      }
     }
+
+    // // Change hours on buttons click
+    // changeHours(direction) {
+    //   const
+    //     selectedMoment = this.get('selectedDate'),
+    //     currentHours = selectedMoment.hours(),
+    //     newHours = (currentHours + 24 + direction) % 24;
+    //
+    //   this.set('selectedDate', this.get('selectedDate').clone().hours(newHours));
+    //   // this.set('hours', newHours);
+    // },
+    //
+    // // Change minutes on buttons click
+    // changeMinutes(direction) {
+    //   const
+    //     selectedMoment = this.get('selectedDate'),
+    //     currentMinutes = selectedMoment.minutes(),
+    //     newMinutes = (currentMinutes + 60 + direction) % 60;
+    //
+    //   this.set('selectedDate', this.get('selectedDate').clone().minutes(newMinutes));
+    // },
+    //
+    // // Change hours on manual enter in input
+    // enterHour(value) {
+    //   const selectedMoment = this.get('selectedDate');
+    //
+    //   if (this.isNumeric(value)) {
+    //     if (value.length > 2) {
+    //       alert('Hour value should not contain more than 2 numbers');
+    //     }
+    //
+    //     if (value.length === 2) {
+    //       let validValue = value % 24;
+    //       this.set('selectedDate', selectedMoment.clone().hours(validValue));
+    //     }
+    //   } else if (value !== '') {
+    //     alert('Please enter a number');
+    //   }
+    //
+    // },
+    //
+    // // Change minutes on manual enter in input
+    // enterMinutes(value) {
+    //   const selectedMoment = this.get('selectedDate');
+    //
+    //   if (this.isNumeric(value)) {
+    //     if (value.length > 2) {
+    //       alert('Hour value should not contain more than 2 numbers');
+    //     }
+    //
+    //     if (value.length === 2) {
+    //       let validValue = value % 60;
+    //       this.set('selectedDate', selectedMoment.clone().minutes(validValue));
+    //     }
+    //   } else if (value !== '') {
+    //     alert('Please enter a number');
+    //   }
+    // }
   }
 
 });

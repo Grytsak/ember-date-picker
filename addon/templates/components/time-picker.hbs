@@ -1,0 +1,25 @@
+<div class="date-picker__time-container {{if dateNotPicked 'hidden'}}">
+    <div class="date-picker__time-input-container">
+        {{input class='date-picker__time-input'
+                value=(moment-format selectedDate 'HH')
+                type='text'
+                key-up='enterHour'
+        }}
+        <div class="date-picker__time-btns-container">
+            <div class="date-picker__time-hour date-picker--hour-up" {{action "changeHours" 1}}><i class="fa fa-chevron-up"></i></div>
+            <div class="date-picker__time-hour date-picker--hour-down" {{action "changeHours" -1}}><i class="fa fa-chevron-down"></i></div>
+        </div>
+    </div>
+    <span class="date-picker--time-divider">:</span>
+    <div class="date-picker__time-input-container">
+        {{input class='date-picker__time-input'
+                value=(moment-format selectedDate 'mm')
+                type='text'
+                key-up='enterMinutes'
+        }}
+        <div class="date-picker__time-btns-container">
+            <div class="date-picker__time-min date-picker--min-up" {{action "changeMinutes" 5}}><i class="fa fa-chevron-up"></i></div>
+            <div class="date-picker__time-min date-picker--min-down" {{action "changeMinutes" -5}}><i class="fa fa-chevron-down"></i></div>
+        </div>
+    </div>
+</div>
