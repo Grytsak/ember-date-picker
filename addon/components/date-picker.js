@@ -11,7 +11,6 @@ export default Component.extend({
     this._super(...arguments);
 
     let locale = window.navigator.userLanguage || window.navigator.language;
-    console.log('initLocale:', locale);
     if (locale) this.set('locale', locale);
 
     this.set('stateDate', this.get('moment').moment());
@@ -74,9 +73,6 @@ export default Component.extend({
     // Change month and year when click prev/next
     this.set('currentMonth', this.get('stateDate').format('MMMM'));
     this.set('currentYear', this.get('stateDate').format('YYYY'));
-
-    // console.log('stateDate', this.get('stateDate'));
-    // console.log('selectedDate', this.get('selectedDate'));
   },
   // Array of objects for each day
   dayObjects: computed('stateDate', function () {
@@ -102,19 +98,6 @@ export default Component.extend({
     }
 
   }),
-  // hours: computed('selectedDate', {
-  //   get(propName) {
-  //     const selectedDate = this.get('selectedDate');
-  //
-  //     if (!selectedDate) return;
-  //
-  //     return selectedDate.hours();
-  //   },
-  //
-  //   set(propName, value) {
-  //     this.set('selectedDate', this.get('selectedDate').clone().hours(value));
-  //   }
-  // }),
 
   actions: {
 
@@ -157,65 +140,12 @@ export default Component.extend({
         alert('Please enter a number');
       }
     }
-
-    // // Change hours on buttons click
-    // changeHours(direction) {
-    //   const
-    //     selectedMoment = this.get('selectedDate'),
-    //     currentHours = selectedMoment.hours(),
-    //     newHours = (currentHours + 24 + direction) % 24;
-    //
-    //   this.set('selectedDate', this.get('selectedDate').clone().hours(newHours));
-    //   // this.set('hours', newHours);
-    // },
-    //
-    // // Change minutes on buttons click
-    // changeMinutes(direction) {
-    //   const
-    //     selectedMoment = this.get('selectedDate'),
-    //     currentMinutes = selectedMoment.minutes(),
-    //     newMinutes = (currentMinutes + 60 + direction) % 60;
-    //
-    //   this.set('selectedDate', this.get('selectedDate').clone().minutes(newMinutes));
-    // },
-    //
-    // // Change hours on manual enter in input
-    // enterHour(value) {
-    //   const selectedMoment = this.get('selectedDate');
-    //
-    //   if (this.isNumeric(value)) {
-    //     if (value.length > 2) {
-    //       alert('Hour value should not contain more than 2 numbers');
-    //     }
-    //
-    //     if (value.length === 2) {
-    //       let validValue = value % 24;
-    //       this.set('selectedDate', selectedMoment.clone().hours(validValue));
-    //     }
-    //   } else if (value !== '') {
-    //     alert('Please enter a number');
-    //   }
-    //
-    // },
-    //
-    // // Change minutes on manual enter in input
-    // enterMinutes(value) {
-    //   const selectedMoment = this.get('selectedDate');
-    //
-    //   if (this.isNumeric(value)) {
-    //     if (value.length > 2) {
-    //       alert('Hour value should not contain more than 2 numbers');
-    //     }
-    //
-    //     if (value.length === 2) {
-    //       let validValue = value % 60;
-    //       this.set('selectedDate', selectedMoment.clone().minutes(validValue));
-    //     }
-    //   } else if (value !== '') {
-    //     alert('Please enter a number');
-    //   }
-    // }
   }
 
 });
+
+
+
+
+
 

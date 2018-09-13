@@ -11,7 +11,7 @@ export default Component.extend({
   isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   },
-  
+
   actions: {
     // Change hours on buttons click
     changeHours(direction) {
